@@ -26,6 +26,12 @@
 #define CM 28
 #define INC 71
 
+#if ARDUINO >= 100
+  #include <Arduino.h>
+#else
+  #include <WProgram.h>
+#endif
+
 class Ultrasonic {
   public:
     Ultrasonic(uint8_t sigPin) : Ultrasonic(sigPin, sigPin) {};
