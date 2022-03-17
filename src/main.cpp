@@ -9,26 +9,18 @@
 #include <SendMessage.h>
 #include <DisplayOLED.h>
 
+
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
-
 
 
 const char* SSID = "ABCD";
 const char* WiFi_PassWord =  "kc70491533";
 
 
-void TCA9548A(uint8_t bus){
-  Wire.beginTransmission(0x70);  // TCA9548A address
-  Wire.write(1 << bus);          // send byte to select bus
-  Wire.endTransmission();
-  Serial.print(bus);
-}
-
-
 void setup() 
 {
-  Serial.begin (9600);             // Serial Port begin
+  Serial.begin(9600);             // Serial Port begin
   Wire.begin();
 
 
@@ -54,8 +46,8 @@ Ultrasonic* ultrasonic_out = new Ultrasonic(26, 27);
 void loop()
 {   
 	// DeBug
-	Serial.println(ultrasonic_in->read());
-	Serial.println(ultrasonic_out->read());
+	Serial.println(String("Ultrasonic In  :") + ultrasonic_in->read());
+	Serial.println(String("Ultrasonic Out :") + ultrasonic_out->read());
   	delay(150);
 
 	if (CarDetect::car_in(ultrasonic_in))
