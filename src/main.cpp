@@ -7,11 +7,12 @@
 #include <Ultrasonic.h>
 #include <CarDetect.h>
 #include <SendMessage.h>
+#include <DisplayOLED.h>
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+
 
 const char* SSID = "ABCD";
 const char* WiFi_PassWord =  "kc70491533";
@@ -27,9 +28,9 @@ void TCA9548A(uint8_t bus){
 
 void setup() 
 {
-  Serial.begin (115200);             // Serial Port begin
+  Serial.begin (9600);             // Serial Port begin
   Wire.begin();
-  display.clearDisplay();
+
 
   WiFi.begin(SSID, WiFi_PassWord);
   Serial.print("Connecting to WiFi");
@@ -45,31 +46,40 @@ void setup()
   
 }
 
+Adafruit_SSD1306* display = new Adafruit_SSD1306(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
+Multi_OLED* multi_oled = new Multi_OLED(display);
+Ultrasonic* ultrasonic_in = new Ultrasonic(13, 12);
+Ultrasonic* ultrasonic_out = new Ultrasonic(26, 27);
 
 void loop()
 {   
-	Ultrasonic* ultrasonic_in = new Ultrasonic(13, 12);
-	Ultrasonic* ultrasonic_out = new Ultrasonic(26, 27);
-
 	// DeBug
 	Serial.println(ultrasonic_in->read());
 	Serial.println(ultrasonic_out->read());
-
-  
   	delay(150);
 
 	if (CarDetect::car_in(ultrasonic_in))
 	{
 		Serial.println("[Main]	:Car In");
+		multi_oled->display(5, ImageData::logo_come_car);
+		multi_oled->display(4, ImageData::logo_front_car);
 		SendMessage::send_msg(1);
 		delay(1000);
+		multi_oled->clear(5);
+		multi_oled->clear(4);
 	}
 
 
 	if (CarDetect::car_in(ultrasonic_out))
 	{
 		Serial.println("[Main]	:Car Out");
+		multi_oled->display(2, ImageData::logo_come_car);
+		multi_oled->display(3, ImageData::logo_front_car);
 		SendMessage::send_msg(-1);
 		delay(1000);
+		multi_oled->clear(2);
+		multi_oled->clear(3);
 	}
+
+
 }
