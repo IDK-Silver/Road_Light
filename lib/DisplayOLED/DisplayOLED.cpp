@@ -41,4 +41,5 @@ void Multi_OLED::clear(int index)
 
     TCA9548A(index);
     this->oled_obj->clearDisplay();
+	this->oled_obj->display();
 }
