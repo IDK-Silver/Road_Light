@@ -36,3 +36,6 @@
 # PIO
 /.pio
 
+#System File
+*.DS_Store
+
